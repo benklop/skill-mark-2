@@ -6,100 +6,55 @@ import org.kde.kirigami 2.4 as Kirigami
 import Mycroft 1.0 as Mycroft
 
 Item {
+    id: root
+
+    property var volume: sessionData.volume
+
+    function getOpacity(volume) {
+        if (volume < 2)
+            return 0.7;
+        else if (volume < 5)
+            return 0.8;
+        else if (volume < 8)
+            return 0.9;
+        else
+            return 1.0;
+    }
+
     function getLength(volume, pos) {
-        var val = (volume * 2 + pos);
+        var val = (volume * 2) * pos;
         if (val < 0)
             val = 0;
-        else if (val > 6)
-        val = 6;
-        console.log(val)
+        else if (val > 15)
+            val = 15;
         return 36 + 36 * val;
     }
 
-    ColumnLayout {
-        id: grid
-        width: parent.width
-	height: parent.height
-        spacing: Kirigami.Units.largeSpacing
 
-        Item {
-            height: Kirigami.Units.largeSpacing * 5
+    RowLayout {
+        id: frame1
+        anchors.centerIn: parent
+        //Spacing is faked by items black space
+        spacing: 0
+        // Dynamic sizing of 4/6 of the screen size
+        width: Math.min(root.width, root.height)/6 * 4
+        height: width
+        visible: true
+
+        VolumeBar {
+            strength: 0.5
         }
-        RowLayout {
-            id: frame1
-            visible: true
-	height: parent.height
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Rectangle {
-                height: 600
-                width: 60
-                color: "#00000000"
-                Rectangle {
-                    id: f11
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 36
-                    radius: 18
-                    height: getLength(sessionData.volume, -2)
-                    color: "#40DBB0"
-                }
-            }
-            Rectangle {
-                height: 600
-                width: 60
-                color: "#00000000"
-                Rectangle {
-                    id: f12
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 36
-                    radius: 18
-                    height: getLength(sessionData.volume, -1)
-                    color: "#40DBB0"
-                }
-            }
-            Rectangle {
-                height: 600
-                width: 60
-                color: "#00000000"
-                Rectangle {
-                    id: f13
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 36
-                    radius: 18
-                    height: getLength(sessionData.volume, 0)
-                    color: "#40DBB0"
-                }
-            }
-            Rectangle {
-                height: 600
-                width: 60
-                color: "#00000000"
-                Rectangle {
-                    id: f14
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 36
-                    radius: 18
-                    height: getLength(sessionData.volume, -1)
-                    color: "#40DBB0"
-                }
-            }
-            Rectangle {
-                height: 600
-                width: 60
-                color: "#00000000"
-                Rectangle {
-                    id: f15
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 36
-                    radius: 18
-                    height: getLength(sessionData.volume, -2)
-                    color: "#40DBB0"
-                }
-            }
+        VolumeBar {
+            strength: 0.75
+        }
+        VolumeBar {
+            strength: 1
+        }
+        VolumeBar {
+            strength: 0.75
+        }
+        VolumeBar {
+            strength: 0.5
         }
     }
 }
